@@ -15,6 +15,7 @@
  */
 
 static PID * pid = new PID();
+static Vision * vis = new Vision();
 
 void opcontrol() {
 
@@ -28,53 +29,53 @@ void opcontrol() {
   pros::Motor ballIntake_mtr(3, HIGHSPEED, REV, DEGREES);
   pros::Motor indexer(4, HIGHSPEED, REV, DEGREES);
 
-  pros::ADIUltrasonic leftSensor('A', 'B');
-  pros::ADIUltrasonic rightSensor('C', 'D');
   pros::Controller master(MAIN);
 
 	int speed = 0;
 
-
-
 	while (true) {
 
-		leftBDrive_mtr.move(((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X)/2)*1.5));
-		leftFDrive_mtr.move(((master.get_analog(ANALOG_LEFT_Y) + master.get_analog(ANALOG_LEFT_X)/2)*1.5));
-		rightFDrive_mtr.move(((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)/2)*1.5));
-		rightBDrive_mtr.move(((master.get_analog(ANALOG_LEFT_Y) - master.get_analog(ANALOG_LEFT_X)/2)*1.5));
+		leftBDrive_mtr.move(((master.get_analog(LEFT_Y) + master.get_analog(LEFT_X)/2)*1.5));
+		leftFDrive_mtr.move(((master.get_analog(LEFT_Y) + master.get_analog(LEFT_X)/2)*1.5));
+		rightFDrive_mtr.move(((master.get_analog(LEFT_Y) - master.get_analog(LEFT_X)/2)*1.5));
+		rightBDrive_mtr.move(((master.get_analog(LEFT_Y) - master.get_analog(LEFT_X)/2)*1.5));
 
-    //pros::lcd::set_text(5, "The Current Number is: " + std::to_string(pid->takeSnapshot()));
-
-
-		flyWheel_mtr.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+		flyWheel_mtr.set_brake_mode(COAST);
 
 		pid->driveBrakeHold();
 
+    //vis->flagAlignment();
+
     tipper.move(master.get_analog(RIGHT_Y));
 
-		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1))
+		if(master.get_digital(BTN_R1))
 		{
       for(int i = 1; i <= 127; i++)
 			{
 				speed++;
 			}
 		}
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R2))
+		else if(master.get_digital(BTN_R2))
 		{
 			speed = 0;
 		}
 
-		flyWheel_mtr.move(speed);
+    flyWheel_mtr.move(speed);
 
-    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
+    /*if(master.get_digital(pros::BTN_A))
+    {
+      tipper.move_relative(95, 100);
+    }*/
+
+    if(master.get_digital(BTN_L1))
 		{
 			indexer.move(100);
 		}
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
+		else if(master.get_digital(BTN_L2))
 		{
 			ballIntake_mtr.move(100);
 		}
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A))
+		else if(master.get_digital(BTN_A))
 		{
 			ballIntake_mtr.move(-87);
 		}

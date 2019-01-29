@@ -9,33 +9,11 @@ pros::Motor flyWheel(10, HIGHSPEED, FWD, DEGREES);
 pros::Motor tipper(9, HIGHSPEED, FWD, DEGREES);
 pros::Motor intake(3, HIGHSPEED, REV, DEGREES);
 pros::Motor indexer(4, HIGHSPEED, REV, DEGREES);
-pros::Vision vision_sensor (8);
 
 PID::PID()
 {
 
 }
-
-/*int PID::takeSnapshot()
-{
-  pros::vision_object_s_t obj = vision_sensor.get_by_sig(0, 1);
-
-  int xPix[20];
-  int sum = 0;
-/*
-  for(int i = 0; i < 20; i++)
-  {
-    int xPix[i] = {obj.x_middle_coord};
-  }
-
-  for(int i = 0; i < 20; i++)
-  {
-    sum += xPix[i];
-  }
-
-
-  return sum/20;
-}*/
 
 void PID::capTip()
 {
@@ -44,46 +22,6 @@ void PID::capTip()
   tipper.move_relative(-450, -127);
 
   pros::delay(1000);
-}
-
-void PID::visionCorrect()
-{
-  int midX = 158;
-
-  bool linedUp = true;
-
-  int x;
-
-  while(linedUp)
-  {
-    pros::vision_object_s_t obj = vision_sensor.get_by_sig(0, 1);
-    x = obj.x_middle_coord;
-
-    if(x < (midX - 5))
-    {
-      leftBDrive_mtr.move(-20);
-      leftFDrive_mtr.move(-20);
-      rightFDrive_mtr.move(20);
-      rightBDrive_mtr.move(20);
-    }
-    else if(x > (midX + 5))
-    {
-      leftBDrive_mtr.move(20);
-      leftFDrive_mtr.move(20);
-      rightFDrive_mtr.move(-20);
-      rightBDrive_mtr.move(-20);
-    }
-    else
-    {
-      linedUp = false;
-      leftBDrive_mtr.move(0);
-      leftFDrive_mtr.move(0);
-      rightFDrive_mtr.move(0);
-      rightBDrive_mtr.move(0);
-    }
-
-    pros::lcd::set_text(5, "The Current Number is: " + std::to_string(x));
-  }
 }
 
 void PID::drive(int speed)

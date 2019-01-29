@@ -15,6 +15,7 @@
  int auton = 0;
 
  PID * pid = new PID();
+ static Vision * vision = new Vision();
 
  void skillsAuton()
  {
@@ -59,7 +60,7 @@
      pid->miscell(0, 127, 0, 600);
 
      //moves forward and toggles the middle high flag
-     pid->move(22, 67, 127, 0, 0, 25);
+     pid->move(22, 67, 127, 0, 0, -25);
 
      pid->stop(150);
 
@@ -105,11 +106,11 @@
 
      pid->stop(150);
 
-     pid->turn(45, 90);
+     pid->turn(51, 90);
 
      pid->stop(200);
 
-     pid->move(30.5, 87, 127, 0, 0, 0);
+     pid->move(32, 87, 127, 0, 0, 0);
 
      pid->stop(150);
 
@@ -119,11 +120,17 @@
 
      pid->move(8, -87, 127, 0, 40, 0);
 
+     pid->stop(200);
+
+     //vision->visionCorrect();
+
      pid->miscell(70, 127, 0, 650);
 
      pid->move(16, 87, 127, 0, 0, 20);
 
      pid->stop(200);
+
+     //vision->visionCorrect();
 
      pid->miscell(127, 127, 0, 1000);
 
@@ -397,11 +404,11 @@ void autonomous()
   {
     skillsAuton();
   }*/
-  blueAuton();
   //blueAuton();
+  skillsAuton();
   //redAuton();
 //
-/*  pid->move(30, 85, 0, 0, 0, 0);
+ /*id->move(30, 85, 0, 0, 0, 0);
   pid->stop(1000);
   pid->move(30, -85, 0, 0, 0, 0);*/
    //pid->turn(90, 90);
